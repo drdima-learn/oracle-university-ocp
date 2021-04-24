@@ -17,6 +17,8 @@
 package labs.pm.data;
 
 import java.math.BigDecimal;
+import java.util.StringJoiner;
+
 import static java.math.RoundingMode.HALF_UP;
 
 /**
@@ -38,13 +40,14 @@ public class Product {
      */
     public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
 
-    private int id;
-    private String name;
-    private BigDecimal price;
-    private Rating rating;
+    private final int id;
+    private final String name;
+    private final BigDecimal price;
+    private final Rating rating;
 
-  
-    
+    public Product() {
+        this(0,"no name", BigDecimal.ZERO);
+    }
 
     public Product(int id, String name, BigDecimal price, Rating rating) {
         this.id = id;
@@ -63,25 +66,19 @@ public class Product {
         return id;
     }
 
-    public void setId(final int id) {
-        this.id = id;
-    }
+
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
+
 
     /**
      * Calculate discount based on a product price and
@@ -97,11 +94,10 @@ public class Product {
         return rating;
     }
     
-    
-    
-    
+    public Product applyRating(Rating newRating){
+        return new Product(this.id, this.name, this.price,newRating);
 
-   
+    }
 
-   
+
 }
