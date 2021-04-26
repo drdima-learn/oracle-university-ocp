@@ -17,6 +17,7 @@
 package labs.pm.data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
@@ -31,7 +32,7 @@ import static java.math.RoundingMode.HALF_UP;
  * @author admin
  * @version 4.0
  */
-public abstract class Product {
+public abstract class Product implements Rateble<Product>{
 
     /**
      * A constant that define a
@@ -46,18 +47,18 @@ public abstract class Product {
     private final BigDecimal price;
     private final Rating rating;
 
-    public Product() {
-        this(0, "no name", BigDecimal.ZERO);
-    }
+//    Product() {
+//        this(0, "no name", BigDecimal.ZERO);
+//    }
 
-    public Product(int id, String name, BigDecimal price, Rating rating) {
+    Product(int id, String name, BigDecimal price, Rating rating) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.rating = rating;
     }
 
-    public Product(int id, String name, BigDecimal price) {
+    Product(int id, String name, BigDecimal price) {
         this(id, name, price, Rating.NOT_RATED);
     }
 
@@ -87,18 +88,27 @@ public abstract class Product {
         return price.multiply(DISCOUNT_RATE).setScale(2, HALF_UP);
     }
 
+    @Override
     public Rating getRating() {
         return rating;
     }
 
-    public Product applyRating(Rating newRating) {
-        return new Product(this.id, this.name, this.price, newRating);
+//    public abstract Product applyRating(Rating newRating);
+//    {
+//        return new Product(this.id, this.name, this.price, newRating);
+//    }
 
+    /**
+     * Get the value of the best before date for the product
+     * @return the value of bestBefore
+     */
+    public LocalDate getBestBefore() {
+        return LocalDate.now();
     }
 
     @Override
     public String toString() {
-        return id + ", " + name + ", " + price + ", " + getDiscount() + ", " + rating.getStars();
+        return id + ", " + name + ", " + price + ", " + getDiscount() + ", " + rating.getStars() + ", " + getBestBefore();
 
     }
 

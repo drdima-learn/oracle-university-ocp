@@ -2,18 +2,18 @@ package labs.pm.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.StringJoiner;
 
-public class Food extends Product{
+public final class Food extends Product {
     private LocalDate bestBefore;
 
-    public Food(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
+    Food(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
         super(id, name, price, rating);
         this.bestBefore = bestBefore;
     }
 
     /**
      * Get the value of the best before date for the product
+     *
      * @return the value of bestBefore
      */
     public LocalDate getBestBefore() {
@@ -22,7 +22,12 @@ public class Food extends Product{
 
     @Override
     public BigDecimal getDiscount() {
-        return (bestBefore.isEqual(LocalDate.now())) ? super.getDiscount(): BigDecimal.ZERO;
+        return (bestBefore.isEqual(LocalDate.now())) ? super.getDiscount() : BigDecimal.ZERO;
+    }
+
+    @Override
+    public Product applyRating(Rating newRating) {
+        return new Food(getId(), getName(), getPrice(), newRating, bestBefore);
     }
 
     @Override
