@@ -18,7 +18,6 @@ package labs.pm.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
 
@@ -32,7 +31,7 @@ import static java.math.RoundingMode.HALF_UP;
  * @author admin
  * @version 4.0
  */
-public abstract class Product implements Rateble<Product>{
+public abstract class Product implements Rateble<Product> {
 
     /**
      * A constant that define a
@@ -100,6 +99,7 @@ public abstract class Product implements Rateble<Product>{
 
     /**
      * Get the value of the best before date for the product
+     *
      * @return the value of bestBefore
      */
     public LocalDate getBestBefore() {
@@ -115,7 +115,7 @@ public abstract class Product implements Rateble<Product>{
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 23 * hash + this.id;
+        hash = 61 * hash + this.id;
         return hash;
     }
 
@@ -125,9 +125,9 @@ public abstract class Product implements Rateble<Product>{
             return true;
         }
 //        if (obj!=null && getClass() == obj.getClass()){
-        if (obj instanceof Product){
+        if (obj instanceof Product) {
             final Product other = (Product) obj;
-            return this.id == other.id && Objects.equals(this.name, other.name);
+            return this.id == other.id;  // && Objects.equals(this.name, other.name);
         }
         return false;
     }

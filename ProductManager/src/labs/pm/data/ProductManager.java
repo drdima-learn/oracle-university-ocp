@@ -10,6 +10,8 @@ import java.util.*;
 
 public class ProductManager {
 
+    public static List<Review> reviewsStatic;
+
     private Locale locale;
     private ResourceBundle resources;
     private DateTimeFormatter dateFormat;
@@ -38,8 +40,23 @@ public class ProductManager {
         return product;
     }
 
+    public Product findProduct(int id){
+        Product result = null;
+        for (Product product: products.keySet()){
+            if (product.getId()==id){
+                result = product;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public Product reviewProduct(int id, Rating rating, String comments) {
+        return reviewProduct(findProduct(id), rating, comments);
+    }
     public Product reviewProduct(Product product, Rating rating, String comments) {
         List<Review> reviews = products.get(product);
+        reviewsStatic = reviews;
         products.remove(product);
         reviews.add(new Review(rating, comments));
 
@@ -53,8 +70,13 @@ public class ProductManager {
         return product;
     }
 
+    public void printProductReport(int id) {
+        printProductReport(findProduct(id));
+    }
+
     public void printProductReport(Product product) {
         List<Review> reviews = products.get(product);
+
         StringBuilder txt = new StringBuilder();
 
         txt.append(MessageFormat.format(resources.getString("product"),
@@ -63,6 +85,10 @@ public class ProductManager {
                 product.getRating().getStars(),
                 dateFormat.format(product.getBestBefore())));
         txt.append('\n');
+
+        Collections.sort(reviews);
+        //reviews.sort(null);
+
         for (Review review : reviews) {
             txt.append(MessageFormat.format(resources.getString("review"),
                     review.getRating().getStars(),
