@@ -57,7 +57,7 @@ public class Shop {
         pm.reviewProduct(102, Rating.THREE_STAR, "Coffee was ok");
         pm.reviewProduct(102, Rating.ONE_STAR, "Where is the milk?!");
         pm.reviewProduct(102, Rating.FIVE_STAR, "It's perfect with ten spons of sugar!");
-        pm.printProductReport(102);
+        //pm.printProductReport(102);
 
         //pm.changeLocal("fr-FR");
 
@@ -82,15 +82,20 @@ public class Shop {
         pm.reviewProduct(106, Rating.THREE_STAR, "Better then cookie");
         pm.reviewProduct(106, Rating.TWO_STAR, "Too bitter");
         pm.reviewProduct(106, Rating.ONE_STAR, "I don't get it!");
-        //pm.printProductReport(106);
+        pm.printProductReport(106);
+
+        System.out.println("-------------");
+        pm.printProducts(p ->p.getPrice().floatValue()<2,
+                (pr1,pr2)->pr2.getRating().ordinal()-pr1.getRating().ordinal());
+        System.out.println("------end -------");
 
         Comparator<Product> ratingSorter = (o1,o2) -> o1.getRating().ordinal() - o2.getRating().ordinal();
-        pm.printProducts(  ratingSorter );
+        pm.printProducts((p -> true), ratingSorter );
 
         Comparator<Product> priceSorter = (o1,o2) -> o1.getPrice().compareTo(o2.getPrice());
-        pm.printProducts( priceSorter );
+        pm.printProducts((p -> true), priceSorter );
 
-        pm.printProducts(ratingSorter.thenComparing(priceSorter).reversed());
+        pm.printProducts((p -> true), ratingSorter.thenComparing(priceSorter).reversed());
 
     }
 
