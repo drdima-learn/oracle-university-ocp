@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductManager {
 
@@ -14,6 +15,7 @@ public class ProductManager {
     private Map<Product, List<Review>> products = new HashMap<>();
 
     private ResourceFormatter formatter;
+
     private static Map<String, ResourceFormatter> formatters
             = Map.of("en-GB", new ResourceFormatter(Locale.UK),
             "en-US", new ResourceFormatter(Locale.US),
@@ -106,6 +108,21 @@ public class ProductManager {
             txt.append('\n');
         }
         System.out.println(txt);
+    }
+
+    public void printProducts(Comparator<Product> sorter){
+        List<Product> productList = new ArrayList<>(products.keySet());
+        // List<Product> productList  = products.keySet().stream().collect(Collectors.toList());
+        productList.sort(sorter);
+        StringBuilder txt = new StringBuilder();
+        for(Product product: productList){
+            txt.append(formatter.formatProduct(product) + '\n');
+        }
+
+
+        //productList.forEach( (p) -> txt.append(formatter.formatProduct(p) + '\n'));
+        System.out.println(txt);
+
     }
 
 
