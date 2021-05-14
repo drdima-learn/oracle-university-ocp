@@ -146,6 +146,25 @@ public class ProductManager {
 
     }
 
+    public Map<String, String> getDiscount(){
+
+        return products.keySet()
+                .stream()
+                .collect(
+                        Collectors.groupingBy(
+                                product -> product.getRating().getStars(),
+                                Collectors.collectingAndThen(
+                                    Collectors.summarizingDouble(
+                                        product -> product.getDiscount().doubleValue()),
+                                 discount->formatter.moneyFormat.format(discount.getSum())
+
+                                )
+                        ));
+
+
+
+    }
+
 
     private static class ResourceFormatter {
         private Locale locale;

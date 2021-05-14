@@ -51,7 +51,7 @@ public class Shop {
         //pm.printProductReport(101);
 
 
-        pm.changeLocal("ru-RU");
+        //pm.changeLocal("ru-RU");
 
         Product p2 = pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
         pm.reviewProduct(102, Rating.THREE_STAR, "Coffee was ok");
@@ -84,6 +84,10 @@ public class Shop {
         pm.reviewProduct(106, Rating.ONE_STAR, "I don't get it!");
         pm.printProductReport(106);
 
+
+
+
+
         System.out.println("-------------");
         pm.printProducts(p ->p.getPrice().floatValue()<2,
                 (pr1,pr2)->pr2.getRating().ordinal()-pr1.getRating().ordinal());
@@ -96,6 +100,8 @@ public class Shop {
         pm.printProducts((p -> true), priceSorter );
 
         pm.printProducts((p -> true), ratingSorter.thenComparing(priceSorter).reversed());
+
+        pm.getDiscount().forEach( (rating, discount)-> System.out.println(rating +"\t" + discount) );
 
     }
 
