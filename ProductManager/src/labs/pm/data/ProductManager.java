@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ProductManager {
@@ -24,6 +26,8 @@ public class ProductManager {
             "ru-RU", new ResourceFormatter(new Locale("ru", "RU")),
             "zh-CN", new ResourceFormatter(Locale.CHINA)
     );
+
+    private static final Logger logger = Logger.getLogger(ProductManager.class.getName());
 
 
     public ProductManager(Locale locale) {
@@ -65,12 +69,25 @@ public class ProductManager {
 //        return result;
 //    }
 
-    public Product findProduct(int id) {
-        return products.keySet().stream().filter(p -> p.getId() == id).findFirst().orElseGet(() -> null);
+    public Product findProduct(int id) throws ProductManagerException {
+        //Product product =  products.keySet().stream().filter(p -> p.getId() == id).findFirst().orElseGet(() -> null);
+        //return products.keySet().stream().filter(p -> p.getId() == id).findFirst().orElseThrow(()->new RuntimeException());
+
+        //return products.keySet().stream().filter(p -> p.getId() == id).findFirst().get();
+        return products.keySet().stream().filter(p -> p.getId() == id).findFirst()
+                .orElseThrow(()->new ProductManagerException("Product with id "+id+" not found"));
+
     }
 
     public Product reviewProduct(int id, Rating rating, String comments) {
-        return reviewProduct(findProduct(id), rating, comments);
+        try {
+            return reviewProduct(findProduct(id), rating, comments);
+        } catch (ProductManagerException ex) {
+            //e.printStackTrace();
+            logger.log(Level.INFO, ex.getMessage());
+
+        }
+        return null;
     }
 
     public Product reviewProduct(Product product, Rating rating, String comments) {
@@ -95,17 +112,22 @@ public class ProductManager {
     }
 
     public void printProductReport(int id) {
-        printProductReport(findProduct(id));
+        try {
+            printProductReport(findProduct(id));
+        } catch (ProductManagerException ex) {
+            logger.log(Level.INFO, ex.getMessage());
+        }
+
     }
 
     private void printProductReport(Product product) {
         List<Review> reviews = products.get(product);
+        Collections.sort(reviews);
+        //reviews.sort(null);
         StringBuilder txt = new StringBuilder();
         txt.append(formatter.formatProduct(product));
         txt.append('\n');
 
-        Collections.sort(reviews);
-        reviews.sort(null);
 
         if (reviews.isEmpty()) {
             txt.append(formatter.getText("no.reviews") + '\n');
@@ -139,14 +161,14 @@ public class ProductManager {
 //        txt.append(
 //                products.keySet().stream().sorted(sorter).map(p -> formatter.formatProduct(p) + '\n').collect(Collectors.joining())
 //        );
-        products.keySet().stream().sorted(sorter).filter(filter).forEach(p->txt.append(formatter.formatProduct(p)+'\n'));
+        products.keySet().stream().sorted(sorter).filter(filter).forEach(p -> txt.append(formatter.formatProduct(p) + '\n'));
 
         //productList.forEach( (p) -> txt.append(formatter.formatProduct(p) + '\n'));
         System.out.println(txt);
 
     }
 
-    public Map<String, String> getDiscount(){
+    public Map<String, String> getDiscount() {
 
         return products.keySet()
                 .stream()
@@ -154,13 +176,12 @@ public class ProductManager {
                         Collectors.groupingBy(
                                 product -> product.getRating().getStars(),
                                 Collectors.collectingAndThen(
-                                    Collectors.summarizingDouble(
-                                        product -> product.getDiscount().doubleValue()),
-                                 discount->formatter.moneyFormat.format(discount.getSum())
+                                        Collectors.summarizingDouble(
+                                                product -> product.getDiscount().doubleValue()),
+                                        discount -> formatter.moneyFormat.format(discount.getSum())
 
                                 )
                         ));
-
 
 
     }
