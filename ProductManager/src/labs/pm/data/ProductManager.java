@@ -3,6 +3,7 @@ package labs.pm.data;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -16,6 +17,11 @@ public class ProductManager {
 
 
     private Map<Product, List<Review>> products = new HashMap<>();
+
+    private ResourceBundle config = ResourceBundle.getBundle("labs.pm.data.config");
+
+    private MessageFormat reviewFormat = new MessageFormat(config.getString("review.data.format"));
+    private MessageFormat productFormat = new MessageFormat(config.getString("product.data.format"));
 
     private ResourceFormatter formatter;
 
@@ -75,7 +81,7 @@ public class ProductManager {
 
         //return products.keySet().stream().filter(p -> p.getId() == id).findFirst().get();
         return products.keySet().stream().filter(p -> p.getId() == id).findFirst()
-                .orElseThrow(()->new ProductManagerException("Product with id "+id+" not found"));
+                .orElseThrow(() -> new ProductManagerException("Product with id " + id + " not found"));
 
     }
 
@@ -147,6 +153,16 @@ public class ProductManager {
 //            txt.append('\n');
 //        }
         System.out.println(txt);
+    }
+
+    public void parseReview(String text) {
+        try {
+            Object[] values = reviewFormat.parse(text);
+            reviewProduct(Integer.parseInt((String) values[0]), Rateble.convert(Integer.parseInt((String) values[1])), (String) values[2]);
+        } catch (ParseException | NumberFormatException ex) {
+            logger.log(Level.WARNING, "Error parsing review " + text, ex);
+        }
+
     }
 
     public void printProducts(Predicate<Product> filter, Comparator<Product> sorter) {
