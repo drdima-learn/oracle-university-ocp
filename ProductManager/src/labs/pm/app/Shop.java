@@ -40,15 +40,28 @@ public class Shop {
         ProductManager pm = new ProductManager(Locale.UK);
         //ProductManager pm = new ProductManager("ru-RU");
 
-        Product p1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
+        //Product p1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
+        pm.parseProduct("D,101,Tea,1.99,0,2019-09-19");
+        //pm.parseProduct("D,101,Tea,1.99,0,2019-09-19-49");
         pm.printProductReport(101);
-        pm.parseReview("101,X,Nice hot cup of tea");
+
 //        pm.reviewProduct(101, Rating.FOUR_STAR, "Nice hot cup of tea");
-//        pm.reviewProduct(101, Rating.TWO_STAR, "Fine tea");
+//        pm.reviewProduct(101, Rating.TWO_STAR, "Rather Weak tea");
+//        pm.reviewProduct(101, Rating.FOUR_STAR, "Fine tea");
 //        pm.reviewProduct(101, Rating.FOUR_STAR, "Good tea");
 //        pm.reviewProduct(101, Rating.FIVE_STAR, "Perfect tea");
 //        pm.reviewProduct(101, Rating.THREE_STAR, "Just add some lemon");
+
+        pm.parseReview("101,4,Nice hot cup of tea");
+        pm.parseReview("101,2,Rather Weak tea");
+        pm.parseReview("101,4,Fine tea");
+        pm.parseReview("101,4,Good tea");
+        pm.parseReview("101,5,Perfect tea");
+        pm.parseReview("101,3,Just add some lemon");
         pm.printProductReport(101);
+
+
+        pm.parseProduct("F,103,Cake,3.99,0,2019-09-19");
 
 
         //pm.changeLocal("ru-RU");
