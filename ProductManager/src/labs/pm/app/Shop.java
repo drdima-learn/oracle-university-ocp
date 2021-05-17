@@ -74,11 +74,11 @@ public class Shop {
 //
 //        //pm.changeLocal("fr-FR");
 //
-//        Product p3 = pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), Rating.NOT_RATED, LocalDate.now().plusDays(2));
-//        pm.reviewProduct(103, Rating.FIVE_STAR, "Very nice cake");
-//        pm.reviewProduct(103, Rating.FOUR_STAR, "It good, but I've expected more chocolate");
-//        pm.reviewProduct(103, Rating.FIVE_STAR, "This cake is perfect!");
-//        //pm.printProductReport(103);
+        Product p3 = pm.createProduct(103, "Cake", BigDecimal.valueOf(3.99), Rating.NOT_RATED, LocalDate.now().plusDays(2));
+        pm.reviewProduct(103, Rating.FIVE_STAR, "Very nice cake");
+        pm.reviewProduct(103, Rating.FOUR_STAR, "It good, but I've expected more chocolate");
+        pm.reviewProduct(103, Rating.FIVE_STAR, "This cake is perfect!");
+        pm.printProductReport(103);
 //
 //        Product p4 = pm.createProduct(104, "Cookie", BigDecimal.valueOf(2.99), Rating.NOT_RATED, LocalDate.now());
 //        pm.reviewProduct(104, Rating.THREE_STAR, "Just another cookie!");
