@@ -158,7 +158,7 @@ public class ProductManager {
     private Product loadProduct(Path file) {
         Product product = null;
         try {
-            parseProduct(Files.lines(dataFolder.resolve(file), Charset.forName("UTF-8")).findFirst().orElseThrow());
+            product = parseProduct(Files.lines(dataFolder.resolve(file), Charset.forName("UTF-8")).findFirst().orElseThrow());
         } catch (Exception ex) {
             logger.log(Level.WARNING, "Error loading product " + ex.getMessage());
         }
